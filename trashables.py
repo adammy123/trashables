@@ -30,8 +30,7 @@ def main():
 	#####CODE TO CLASSIFY TRASH
 	photo()
 	prediction = predict()
-	print "\n\n\n\n\n"
-	print prediction['u\'data']
+
 	#manipulate the prediction to get classification
 	
 	classification = 'trash'
