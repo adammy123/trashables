@@ -18,7 +18,7 @@ def predict():
 	CLIENT_ID = 'fill in the blank'
 	CLIENT_SECRET = 'fill in the blank'
 	app = ClarifaiApp(CLIENT_ID, CLIENT_SECRET)
-	model = app.models.get('general-v1.3')
+	model = app.models.get('b9f4b8160f9747cb8e11df787d77a5e5')
 	prediction = model.predict_by_filename('test.jpg')
 	print prediction
 	return prediction
