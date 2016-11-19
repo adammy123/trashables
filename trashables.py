@@ -20,8 +20,12 @@ def predict():
 	app = ClarifaiApp(CLIENT_ID, CLIENT_SECRET)
 	model = app.models.get('b9f4b8160f9747cb8e11df787d77a5e5')
 	prediction = model.predict_by_filename('test.jpg')
-
-	return prediction
+	outputs = prediction['outputs'][0]['data']['concepts']
+	output = []
+	for concept in outputs:
+		if len(output) < 5:
+			output.append({'name': concept['name'], 'value': concept['value']})
+	return output	
 
 def main():
 	ser = serial.Serial('/dev/tty.usbmodem1411', 9600)
