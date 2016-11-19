@@ -14,8 +14,9 @@ def photo():
 		imwrite("test.jpg",img)
 
 def predict():
-	CLIENT_ID = '-kJkjcvdqlynN1-cWy4rZwOdztrOwc_vt5QAd5RF'
-	CLIENT_SECRET = 'hmS1WDSfn2W4d35Mh1sR1l8N9e_eRsb0OVMvfkd_'
+	#for better security, we could put the CLIENT_ID and CLIENT_SECRET into another file
+	CLIENT_ID = 'fill in the blank'
+	CLIENT_SECRET = 'fill in the blank'
 	app = ClarifaiApp(CLIENT_ID, CLIENT_SECRET)
 	model = app.models.get('general-v1.3')
 	prediction = model.predict_by_filename('test.jpg')
