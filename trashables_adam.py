@@ -1,33 +1,50 @@
 import cv2
+from clarifai.rest import ClarifaiApp
+import serial
+
+def get_image(camera):
+	retval, im = camera.read()
+	return im
+
+def photo():
+
+	camera_port = 0
+	ramp_frames = 30
+	camera = cv2.VideoCapture(camera_port)
  
-# Camera 0 is the integrated web cam on my netbook
-camera_port = 0
- 
-#Number of frames to throw away while the camera adjusts to light levels
-ramp_frames = 30
- 
-# Now we can initialize the camera capture object with the cv2.VideoCapture class.
-# All it needs is the index to a camera port.
-camera = cv2.VideoCapture(camera_port)
- 
-# Captures a single image from the camera and returns it in PIL format
-def get_image():
- # read is the easiest way to get a full image out of a VideoCapture object.
- retval, im = camera.read()
- return im
- 
-# Ramp the camera - these frames will be discarded and are only used to allow v4l2
-# to adjust light levels, if necessary
-for i in xrange(ramp_frames):
- temp = get_image()
-print("Taking image...")
-# Take the actual image we want to keep
-camera_capture = get_image()
-#file = "~/Documents/test/test_adam.png"
-# A nice feature of the imwrite method is that it will automatically choose the
-# correct format based on the file extension you provide. Convenient!
-cv2.imwrite("test.jpg", camera_capture)
- 
-# You'll want to release the camera, otherwise you won't be able to create a new
-# capture object until your script exits
-del(camera)
+	for i in xrange(ramp_frames):
+		temp = get_image(camera)
+	print("Taking image...")
+	camera_capture = get_image(camera)
+	cv2.imwrite("test_adam.jpg", camera_capture)
+	del(camera)
+
+def predict():
+	#for better security, we could put the CLIENT_ID and CLIENT_SECRET into another file
+	CLIENT_ID = '-kJkjcvdqlynN1-cWy4rZwOdztrOwc_vt5QAd5RF'
+	CLIENT_SECRET = 'hmS1WDSfn2W4d35Mh1sR1l8N9e_eRsb0OVMvfkd_'
+	app = ClarifaiApp(CLIENT_ID, CLIENT_SECRET)
+	model = app.models.get('b9f4b8160f9747cb8e11df787d77a5e5')
+	prediction = model.predict_by_filename('test_adam.jpg')
+
+	return prediction
+
+def main():
+	ser = serial.Serial('/dev/tty.usbmodem1411', 9600)
+	classification = ''
+
+	#####CODE TO CLASSIFY TRASH
+	photo()
+	prediction = predict()
+
+	#manipulate the prediction to get classification
+	
+	classification = 'trash'
+	if classification == 'trash':
+		ser.write('0')
+	else:
+		ser.write('1')
+
+
+if __name__ == '__main__':
+    main()
