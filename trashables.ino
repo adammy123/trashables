@@ -1,20 +1,22 @@
 #include<Servo.h>
 #include<SPI.h>
+#define LEDRe 2
+#define echoRe 3
+#define trigRe 4
+#define echoObj 6
+#define trigObj 7
 #define servoPin 8
-#define echoPin 6
-#define trigPin 7
+#define echoWaste 10
+#define trigWaste 11
+#define LEDWaste 12
+
+#define filled_distance 5
 #define bin_distance 18
-#define filled 5
-#define echoPinDepth 3
-#define trigPinDepth 4
-#define LED 12
-#define echoPinDepthRe 10
-#define trigPinDepthRe 11
 
 int flag;
 int distance;
-int depth;
 int depthRe;
+int depthWaste;
 Servo servo;
 
 int usRead(int echo, int trig){
@@ -43,30 +45,42 @@ void right(){
 }
 
 void setup() {
-  // put your setup code here, to run once:
+
+  //initialize servo and set to horizontal
   servo.attach(servoPin);
   servo.write(90);
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
-  pinMode(trigPinDepth, OUTPUT);
-  pinMode(echoPinDepth, INPUT);
-  pinMode(trigPinDepthRe, OUTPUT);
-  pinMode(echoPinDepthRe, INPUT);
-  pinMode(LED, OUTPUT);
-  //Serial.println("begin bridge");
-  //Bridge.begin();
+
+  //initialize LED pins
+  pinMode(LEDRe, OUTPUT); 
+  pinMode(LEDWaste, OUTPUT);
+  digitalWrite(LEDRe, LOW);
+  digitalWrite(LEDWaste, LOW);
+
+  //initialize ultrasonic sensor pins
+  pinMode(trigRe, OUTPUT);
+  pinMode(echoRe, INPUT);
+  pinMode(trigObj, OUTPUT);
+  pinMode(echoObj, INPUT);
+  pinMode(trigWaste, OUTPUT);
+  pinMode(echoWaste, INPUT);
+
   Serial.begin(9600);
-  //while(!Serial);
-  //Serial.println("setup done!");
-  delay(1000);
+  while(!Serial);
 }
 
 void loop() {
-  distance = usRead(echoPin, trigPin);
+  //to detect trash being deposited
+  distance = usRead(echoObj, trigObj);
+
+  //if there is trash detected
   if (distance < bin_distance){
     Serial.println("python");
+
+    //wait for python to send signal
     while(Serial.available() <= 0);
+    
     while(Serial.available()>0){
+      //sorts trash according to label assigned by clarifai
       flag = Serial.parseInt();
       if (flag == 0){
         left();
@@ -76,21 +90,25 @@ void loop() {
       }
     }
     delay(5000);
-    depth = usRead(echoPinDepth, trigPinDepth);
-    if (depth < filled){
-      Serial.println("fullwaste");
-      digitalWrite(LED, HIGH);
+
+    //read depth of recycling bin
+    depthRe = usRead(echoRe, trigRe);
+    if (depthRe < filled_distance){
+      Serial.println("fullrecycle");
+      digitalWrite(LEDRe, HIGH);
     }
     else{
-      digitalWrite(LED, LOW);
+      digitalWrite(LEDRe, LOW);
     }
-    depthRe = usRead(echoPinDepthRe, trigPinDepthRe);
-    if (depthRe < filled){
-      Serial.println("fullrecycle");
-      digitalWrite(LED, HIGH);
+
+    //read depth of waste bin
+    depthWaste = usRead(echoWaste, trigWaste);
+    if (depthWaste < filled_distance){
+      Serial.println("fullwaste");
+      digitalWrite(LEDWaste, HIGH);
     }
-    else if (depth >= filled){
-      digitalWrite(LED, LOW);
+    else{
+      digitalWrite(LEDWaste, LOW);
     }
   }
   delay(1000);
