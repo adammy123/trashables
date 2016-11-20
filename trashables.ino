@@ -5,25 +5,16 @@
 #define trigPin 7
 #define bin_distance 18
 #define filled 5
-<<<<<<< HEAD
 #define echoPinDepth 3
 #define trigPinDepth 4
-#define LED 13
+#define LED 12
 #define echoPinDepthRe 10
 #define trigPinDepthRe 11
-=======
-#define echoPinDepth 4
-#define trigPinDepth 5
-#define LED 9
->>>>>>> origin/master
 
 int flag;
 int distance;
 int depth;
-<<<<<<< HEAD
 int depthRe;
-=======
->>>>>>> origin/master
 Servo servo;
 
 int usRead(int echo, int trig){
@@ -59,11 +50,8 @@ void setup() {
   pinMode(echoPin, INPUT);
   pinMode(trigPinDepth, OUTPUT);
   pinMode(echoPinDepth, INPUT);
-<<<<<<< HEAD
   pinMode(trigPinDepthRe, OUTPUT);
   pinMode(echoPinDepthRe, INPUT);
-=======
->>>>>>> origin/master
   pinMode(LED, OUTPUT);
   //Serial.println("begin bridge");
   //Bridge.begin();
@@ -90,23 +78,20 @@ void loop() {
     delay(5000);
     depth = usRead(echoPinDepth, trigPinDepth);
     if (depth < filled){
-      Serial.println("full");
+      Serial.println("fullwaste");
       digitalWrite(LED, HIGH);
     }
     else{
       digitalWrite(LED, LOW);
     }
-<<<<<<< HEAD
     depthRe = usRead(echoPinDepthRe, trigPinDepthRe);
     if (depthRe < filled){
-      Serial.println("fullre");
+      Serial.println("fullrecycle");
       digitalWrite(LED, HIGH);
     }
     else if (depth >= filled){
       digitalWrite(LED, LOW);
     }
-=======
->>>>>>> origin/master
   }
   delay(1000);
 }
