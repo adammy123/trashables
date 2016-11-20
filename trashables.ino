@@ -62,6 +62,7 @@ void loop() {
         right();
       }
     }
+    delay(5000);
   }
-  delay(5000);
+  delay(1000);
 }

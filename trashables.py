@@ -36,12 +36,11 @@ def main():
 	cam = VideoCapture(camera_port)
 
 	for i in range(ramp_frames):
-	s, temp = get_image(cam)
+		s, temp = get_image(cam)
+	ser = serial.Serial('/dev/tty.usbmodem1411', 9600)
 
+	#loop this indefinitely
 	while True:
-		ser = serial.Serial('/dev/tty.usbmodem1411', 9600)
-		classification = ''
-
 		arduino = True
 
 		#loop here until arduino prints python
@@ -57,9 +56,9 @@ def main():
 		print label
 
 		if label == 'recyclable':
-			ser.write('0')
+			ser.write('0')#left
 		else:
-			ser.write('1')
+			ser.write('1')#right
 
 
 if __name__ == '__main__':
