@@ -1,6 +1,14 @@
 from cv2 import *
 from clarifai.rest import ClarifaiApp
 import serial
+from twilio.rest import TwilioRestClient
+
+def send_sms(message):
+	account_sid = "AC4108caa8ac86a72b977586da0ca3aeba"
+	auth_token = "5b77b5abbc7f8546e8764d27a9805957"
+	client = TwilioRestClient(account_sid, auth_token)
+
+	message = client.messages.create(to="+17737077025", from_="+18472609589", body=message)
 
 def photo(cam):
 	s, img = get_image(cam)
@@ -43,18 +51,20 @@ def main():
 	while True:
 		arduino = True
 
-		#loop here until arduino prints python
+		#loop here until arduino prints python, fullwaste or fullrecycle
 		while arduino:
 			data = ser.readline()[:-2]
 			if data == 'python':
 				arduino = False
-			elif data == 'full':
-				print 'Waste bin is full'
+			elif data == 'fullwaste':
+				print 'Waste bin is full. Message sent'
 				#ADD code for twilio msg
+				send_sms('Waste bin is full. Please empty trash, thank you :)')
 				
-			elif data == 'fullre':
+			elif data == 'fullrecycle':
 				print 'Recycling bin is full'
 				#Add code for twilio msg
+				send_sms('Recycling bin is full. Please empty trash, thank you :)')
 			
 
 		photo(cam)
