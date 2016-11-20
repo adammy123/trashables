@@ -1,15 +1,22 @@
 #include<Servo.h>
 #include<SPI.h>
+
+//pins for recycle bin
 #define LEDRe 2
 #define echoRe 3
 #define trigRe 4
+
+//pins for sorting mechanism
 #define echoObj 6
 #define trigObj 7
 #define servoPin 8
+
+//pins for waste bin
 #define echoWaste 10
 #define trigWaste 11
 #define LEDWaste 12
 
+//constants to test conditions
 #define filled_distance 5
 #define bin_distance 18
 
@@ -80,6 +87,7 @@ void loop() {
     while(Serial.available() <= 0);
     
     while(Serial.available()>0){
+      
       //sorts trash according to label assigned by clarifai
       flag = Serial.parseInt();
       if (flag == 0){
@@ -89,6 +97,8 @@ void loop() {
         right();
       }
     }
+
+    //delay to give time to sorting process
     delay(5000);
 
     //read depth of recycling bin
