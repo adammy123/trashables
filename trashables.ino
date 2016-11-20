@@ -50,6 +50,8 @@ void setup() {
   pinMode(echoPin, INPUT);
   pinMode(trigPinDepth, OUTPUT);
   pinMode(echoPinDepth, INPUT);
+  pinMode(trigPinDepthRe, OUTPUT);
+  pinMode(echoPinDepthRe, INPUT);
   pinMode(LED, OUTPUT);
   //Serial.println("begin bridge");
   //Bridge.begin();
@@ -87,7 +89,7 @@ void loop() {
       Serial.println("fullre");
       digitalWrite(LED, HIGH);
     }
-    else if (depth > filled){
+    else if (depth >= filled){
       digitalWrite(LED, LOW);
     }
   }
