@@ -48,6 +48,14 @@ def main():
 			data = ser.readline()[:-2]
 			if data == 'python':
 				arduino = False
+			elif data == 'full':
+				print 'Waste bin is full'
+				#ADD code for twilio msg
+				
+			elif data == 'fullre':
+				print 'Recycling bin is full'
+				#Add code for twilio msg
+			
 
 		photo(cam)
 		prediction = predict()
