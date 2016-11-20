@@ -41,19 +41,28 @@ def predict():
 	return output	
 
 def main():
-	ser = serial.Serial('/dev/tty.usbmodem1411', 9600)
-	classification = ''
+	while True:
+		ser = serial.Serial('/dev/tty.usbmodem1411', 9600)
+		classification = ''
 
-	photo()
-	prediction = predict()
+		arduino = True
+
+		#loop here until arduino prints python
+		while arduino:
+			data = ser.readline()[:-2]
+			if data == 'python':
+				arduino = False
+
+		photo()
+		prediction = predict()
 	
-	label = prediction[1]['name'].split(' ', 1)[0]
-	print label
+		label = prediction[1]['name'].split(' ', 1)[0]
+		print label
 
-	if label == 'recycable':
-		ser.write('0')
-	else:
-		ser.write('1')
+		if label == 'recycable':
+			ser.write('0')
+		else:
+			ser.write('1')
 
 
 if __name__ == '__main__':
