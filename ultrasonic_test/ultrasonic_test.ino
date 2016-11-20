@@ -1,3 +1,5 @@
+#define echoPin 10
+#define trigPin 11
 int distance;
 
 int usRead(int echo, int trig){
@@ -19,13 +21,13 @@ int usRead(int echo, int trig){
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(7, OUTPUT);
-  pinMode(6, INPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
   Serial.begin(9600);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  distance = usRead(6, 7);
+  distance = usRead(echoPin, trigPin);
   delay(1000);
 }
