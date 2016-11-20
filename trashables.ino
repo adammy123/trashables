@@ -4,9 +4,14 @@
 #define echoPin 6
 #define trigPin 7
 #define bin_distance 18
+#define filled 5
+#define echoPinDepth 4
+#define trigPinDepth 5
+#define LED 9
 
 int flag;
 int distance;
+int depth;
 Servo servo;
 
 int usRead(int echo, int trig){
@@ -40,6 +45,9 @@ void setup() {
   servo.write(90);
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
+  pinMode(trigPinDepth, OUTPUT);
+  pinMode(echoPinDepth, INPUT);
+  pinMode(LED, OUTPUT);
   //Serial.println("begin bridge");
   //Bridge.begin();
   Serial.begin(9600);
@@ -63,6 +71,14 @@ void loop() {
       }
     }
     delay(5000);
+    depth = usRead(echoPinDepth, trigPinDepth);
+    if (depth < filled){
+      Serial.println("full");
+      digitalWrite(LED, HIGH);
+    }
+    else{
+      digitalWrite(LED, LOW);
+    }
   }
   delay(1000);
 }
