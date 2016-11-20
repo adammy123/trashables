@@ -2,17 +2,7 @@ from cv2 import *
 from clarifai.rest import ClarifaiApp
 import serial
 
-def photo():
-	# initialize the camera
-
-	camera_port = 0
-	ramp_frames = 30
-
-	cam = VideoCapture(camera_port)
-
-	for i in range(ramp_frames):
-		s, temp = get_image(cam)
-
+def photo(cam):
 	s, img = get_image(cam)
 
 	if s:    # frame captured without any errors
@@ -41,6 +31,13 @@ def predict():
 	return output	
 
 def main():
+	camera_port = 0
+	ramp_frames = 30
+	cam = VideoCapture(camera_port)
+
+	for i in range(ramp_frames):
+	s, temp = get_image(cam)
+
 	while True:
 		ser = serial.Serial('/dev/tty.usbmodem1411', 9600)
 		classification = ''
@@ -53,7 +50,7 @@ def main():
 			if data == 'python':
 				arduino = False
 
-		photo()
+		photo(cam)
 		prediction = predict()
 	
 		label = prediction[1]['name'].split(' ', 1)[0]
