@@ -4,6 +4,7 @@ import serial
 from twilio.rest import TwilioRestClient
 import os
 
+#to load twilio credentials from local machine
 def load_twilio_config():
     twilio_account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
     twilio_auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
@@ -15,21 +16,25 @@ def load_twilio_config():
 
     return twilio_number, twilio_account_sid, twilio_auth_token
 
+#to load clarifai credentials from local machine
 def load_clarifai_config():
 	clarifai_client_id = os.environ.get('CLARIFAI_CLIENT_ID')
 	clarifai_client_secret = os.environ.get('CLARIFAI_CLIENT_SECRET')
 	clarifai_model = os.environ.get('CLARIFAI_MODEL')
 	return clarifai_client_id, clarifai_client_secret, clarifai_model
 
+#to load your own mobile number to receive messages for demo
 def load_my_number():
 	return os.environ.get('MY_NUMBER')
 
+#use Twilio API to send a HTTP request that sends an sms to a mobile phone
 def send_sms(message):
 	twilio_number, account_sid, auth_token = load_twilio_config()
 	client = TwilioRestClient(account_sid, auth_token)
 	my_number = load_my_number()
 	message = client.messages.create(to=my_number, from_=twilio_number, body=message)
 
+#takes a photo using your machine's camera and saves as a jpeg format
 def photo(cam):
 	s, img = get_image(cam)
 
@@ -40,12 +45,13 @@ def photo(cam):
 		destroyWindow("cam-test")
 		imwrite("test.jpg",img)
 
+#helper function for above function
 def get_image(camera):
 	s, img = camera.read()
 	return s, img
 
+#calls Clarifai's API to predict labels of imagaes
 def predict():
-	#for better security, we could put the CLIENT_ID and CLIENT_SECRET into another file
 	CLIENT_ID, CLIENT_SECRET, clarifai_model = load_clarifai_config()
 	app = ClarifaiApp(CLIENT_ID, CLIENT_SECRET)
 	model = app.models.get(clarifai_model)
