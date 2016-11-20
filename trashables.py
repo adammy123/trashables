@@ -59,7 +59,7 @@ def main():
 		label = prediction[1]['name'].split(' ', 1)[0]
 		print label
 
-		if label == 'recycable':
+		if label == 'recyclable':
 			ser.write('0')
 		else:
 			ser.write('1')

@@ -52,7 +52,7 @@ void loop() {
   distance = usRead(echoPin, trigPin);
   if (distance < bin_distance){
     Serial.println("python");
-    delay(5000);
+    while(Serial.available() <= 0);
     while(Serial.available()>0){
       flag = Serial.parseInt();
       if (flag == 0){
